@@ -2,7 +2,7 @@ name: test and scan
 on:
   push:
     branches: [main]
-  jobs:
+jobs:
   run_tests::
     runs-on: ubuntu-lastest
     steps:  

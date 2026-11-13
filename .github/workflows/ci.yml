@@ -38,7 +38,7 @@ jobs:
           path: ${{matrix.service}}-${{matrix.python-version}}-bandit-report.html
   deploy:
     needs: ["run_tests"]
-    if: github.event.pull_request.marge == true
+    #if: github.event.pull_request.merge == true
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -55,5 +55,28 @@ jobs:
         with:
           path: _site
       - uses: actions/deploy-pages@v5
+  deploy:
+    needs: ["run_tests"]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: $ {{ steps.deployment.outputs.page_url }}
+    steps:
+      - name:  tasks-api-3.12-bandit-report
+        uses: actions/Download-artifact@v8 
+        with:
+          name: tasks-api-3.12-bandit-report
+          path: _site
+      - uses: actions/Download-artifact@v8
+      - with: 
+          name: title-normalizer-3.12-bandit-report
+          path: side
+      - uses: actions/upload-artifact@v5
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v5
 
-
+  
